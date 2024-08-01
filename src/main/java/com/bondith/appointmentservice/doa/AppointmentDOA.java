@@ -6,7 +6,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository
-public interface AppointmentDOA extends JpaRepository<AppointmentDOA, Integer> {
+public interface AppointmentDOA extends JpaRepository<Appointment, Integer> {
     List<Appointment> findByStatus(String status);
 }
