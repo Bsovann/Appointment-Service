@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Service {
+public class NailService {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
