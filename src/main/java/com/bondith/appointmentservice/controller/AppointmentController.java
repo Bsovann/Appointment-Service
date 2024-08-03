@@ -4,9 +4,8 @@ package com.bondith.appointmentservice.controller;
 import com.bondith.appointmentservice.model.Appointment;
 import com.bondith.appointmentservice.service.AppointmentService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -17,8 +16,13 @@ public class AppointmentController {
     private AppointmentService appointmentService;
 
     @GetMapping
-    public List<Appointment> getAllAppointments() {
+    public ResponseEntity<List<Appointment>> getAllAppointments() {
         return appointmentService.getAllAppointments();
+    }
+
+    @PostMapping
+    public ResponseEntity<String> addAppointment(@RequestBody Appointment appointment) {
+        return appointmentService.save(appointment);
     }
 
     @Autowired
