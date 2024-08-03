@@ -23,7 +23,7 @@ public class Appointment {
     @Column(name = "status", nullable = false, columnDefinition = "varchar(50) default 'Scheduled'")
     private String status;
     @ManyToOne
-    private Service service;
+    private NailService service;
     @ManyToOne
     private Technician technician;
 }
