@@ -17,10 +17,9 @@ public interface AppointmentDOA extends JpaRepository<Appointment, Integer> {
     @Query("""
             SELECT COUNT(a) FROM Appointment a \
             WHERE a.technician.id = :technicianId \
-            AND TIME(a.appointmentTime) < :requestedEndTime \
+            AND a.appointment_time = :requestedStartTime \
             """)
     int countConflictingAppointments(@Param("technicianId") int technicianId,
-                                      @Param("requestedStartTime") LocalDateTime requestedStartTime,
-                                      @Param("requestedEndTime") LocalDateTime requestedEndTime);
+                                      @Param("requestedStartTime") LocalDateTime requestedStartTime);
 
 }
