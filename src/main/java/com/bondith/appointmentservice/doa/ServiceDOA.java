@@ -1,4 +1,4 @@
-package com.bondith.appointmentservice.service;
+package com.bondith.appointmentservice.doa;
 
 import com.bondith.appointmentservice.model.NailService;
 import org.springframework.data.jpa.repository.JpaRepository;
