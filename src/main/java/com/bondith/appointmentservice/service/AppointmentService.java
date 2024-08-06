@@ -1,17 +1,13 @@
 package com.bondith.appointmentservice.service;
 
 import com.bondith.appointmentservice.doa.AppointmentDOA;
-import com.bondith.appointmentservice.doa.ServiceDOA;
 import com.bondith.appointmentservice.model.Appointment;
-import com.bondith.appointmentservice.model.NailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 /**
@@ -22,8 +18,6 @@ import java.util.List;
 @Service
 public class AppointmentService {
     private AppointmentDOA appointmentDOA;
-
-    private ServiceDOA serviceDOA;
 
     public List<Appointment> getAppointmentsByStatus(String status) {
         return appointmentDOA.findByStatus(status);
@@ -54,10 +48,5 @@ public class AppointmentService {
     @Autowired
     public void setAppointmentDOA(AppointmentDOA appointmentDOA) {
         this.appointmentDOA = appointmentDOA;
-    }
-
-    @Autowired
-    public void setServiceDOA(ServiceDOA serviceDOA) {
-        this.serviceDOA = serviceDOA;
     }
 }
