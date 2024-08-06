@@ -1,6 +1,7 @@
 package com.bondith.appointmentservice.service;
 
 import com.bondith.appointmentservice.doa.AppointmentDOA;
+import com.bondith.appointmentservice.doa.ServiceDOA;
 import com.bondith.appointmentservice.model.Appointment;
 import com.bondith.appointmentservice.model.NailService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 /**
@@ -31,8 +34,9 @@ public class AppointmentService {
     }
 
     public ResponseEntity<String> save(Appointment appointment) {
+
         // Check if slot available
-        if (!isSlotAvailable(appointment.getTechnician().getId(), appointment.getAppointment_time().toLocalDateTime(), appointment.getService().getId())) {
+        if (!isSlotAvailable(appointment.getTechnician().getId(), appointment.getAppointment_time().toLocalDateTime())) {
             throw new RuntimeException("Appointment already exists");
         }
         appointmentDOA.save(appointment);
@@ -40,13 +44,9 @@ public class AppointmentService {
     }
 
 
-    public boolean isSlotAvailable(int technicianId, LocalDateTime requestedStartTime, int serviceId) {
-        NailService service = serviceDOA.findById(serviceId).orElseThrow(() -> new RuntimeException("Service not found"));
-
-        LocalDateTime requestedEndTime = requestedStartTime.plusMinutes(service.getDuration());
-
+    public boolean isSlotAvailable(int technicianId, LocalDateTime requestedStartTime) {
         int conflictCount = appointmentDOA.countConflictingAppointments(
-                technicianId, requestedStartTime, requestedEndTime);
+                technicianId, requestedStartTime);
 
         return conflictCount == 0;
     }
