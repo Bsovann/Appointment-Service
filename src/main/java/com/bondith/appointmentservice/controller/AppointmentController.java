@@ -15,16 +15,19 @@ public class AppointmentController {
 
     private AppointmentService appointmentService;
 
+    // Get Appointment lists
     @GetMapping
     public ResponseEntity<List<Appointment>> getAllAppointments() {
         return appointmentService.getAllAppointments();
     }
 
+    // Create an appointment
     @PostMapping
     public ResponseEntity<String> addAppointment(@RequestBody Appointment appointment) {
         return appointmentService.save(appointment);
     }
 
+    // Patch Appointment when service is completed.
     @Autowired
     public void setAppointmentService(AppointmentService appointmentService) {
         this.appointmentService = appointmentService;
