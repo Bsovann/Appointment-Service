@@ -33,8 +33,12 @@ public class AppointmentService {
         if (!isSlotAvailable(appointment.getTechnician().getId(), appointment.getAppointment_time().toLocalDateTime())) {
             throw new RuntimeException("Appointment already exists");
         }
+        // Create appointment
         appointmentDOA.save(appointment);
-        return new ResponseEntity<>("Appointment saved", HttpStatus.OK);
+
+        // Update Availability table
+
+        return new ResponseEntity<>("Appointment saved", HttpStatus.CREATED);
     }
 
 
