@@ -1,5 +1,9 @@
 pipeline {
-    agent docker-agent-alpine
+    agent {
+        docker {
+            image 'maven:3.9.7-jdk-17'
+        }
+    }
     tools {
         maven 'Maven3'
     }
