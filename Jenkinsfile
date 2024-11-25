@@ -1,7 +1,7 @@
 pipeline {
     agent {
         docker {
-            label 'docker-agent-alpine'
+            label 'docker-agent'
         }
     }
     tools {
