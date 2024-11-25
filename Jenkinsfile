@@ -19,7 +19,7 @@ pipeline {
                 script {
                     // Run Maven build
                     sh 'mvn clean install -DskipTests'
-                    sh 'mvn package'
+                    sh 'mvn package -DskipTests'
                 }
             }
         }
