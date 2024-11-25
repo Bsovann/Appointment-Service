@@ -1,61 +1,67 @@
 pipeline {
     agent any
-
     environment {
-        AWS_REGION = 'us-east-1' // Set your AWS Region
-        REPO_NAME = 'appointment-app' // Set your ECR repository name
-        DOCKER_IMAGE = "${REPO_NAME}:latest"
-        AWS_CREDENTIALS = 'AKIAY5EW5NV6AQPV7NVD' // Jenkins AWS credentials ID
+        AWS_REGION = 'us-east-1'           // Your AWS region
+        ECR_REPOSITORY = 'appointment-app' // Your ECR repository name
+        ECR_URI = "612349341052.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPOSITORY}"
     }
-
     stages {
         stage('Checkout') {
             steps {
                 checkout scm
             }
         }
-
-        stage('Test') {
+        stage('Build') {
             steps {
-                echo 'Running Tests...'
-                sh './gradlew test' // Update to your testing command
+                script {
+                    // Run Maven build
+                    sh 'mvn clean install'
+                }
             }
         }
-
+        stage('Test') {
+            steps {
+                script {
+                    // Run Maven tests
+                    sh 'mvn test'
+                }
+            }
+        }
         stage('Build Docker Image') {
             steps {
                 script {
-                    docker.build(DOCKER_IMAGE)
+                    // Build Docker image
+                    sh '''
+                    docker build -t $ECR_URI .
+                    '''
                 }
             }
         }
-
         stage('Login to ECR') {
             steps {
                 script {
-                    withAWS(credentials: AWS_CREDENTIALS, region: AWS_REGION) {
-                        sh '''
-                        aws ecr get-login-password --region $AWS_REGION | \
-                        docker login --username AWS --password-stdin 612349341052.dkr.ecr.$AWS_REGION.amazonaws.com
-                        '''
-                    }
+                    // Log into AWS ECR
+                    sh '''
+                    aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $ECR_URI
+                    '''
                 }
             }
         }
-
-        stage('Push to ECR') {
+        stage('Push Docker Image to ECR') {
             steps {
                 script {
-                    sh "docker tag $DOCKER_IMAGE 612349341052.dkr.ecr.$AWS_REGION.amazonaws.com/$DOCKER_IMAGE"
-                    sh "docker push 612349341052.dkr.ecr.$AWS_REGION.amazonaws.com/$DOCKER_IMAGE"
+                    // Push the image to ECR
+                    sh 'docker push $ECR_URI'
                 }
             }
         }
     }
-
     post {
-        always {
-            cleanWs() // Clean up workspace
+        success {
+            echo 'Build and Deployment succeeded!'
+        }
+        failure {
+            echo 'Build or Deployment failed.'
         }
     }
 }
