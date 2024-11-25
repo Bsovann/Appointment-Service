@@ -1,5 +1,9 @@
 pipeline {
     agent any
+    tools {
+        maven 'MAVEN 3.3.9'
+        jdk 'jdk8'
+    }
     environment {
         AWS_REGION = 'us-east-1'           // Your AWS region
         ECR_REPOSITORY = 'appointment-app' // Your ECR repository name
