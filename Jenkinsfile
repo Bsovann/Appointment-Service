@@ -26,7 +26,7 @@ pipeline {
             steps {
                 script {
                     // Run Maven tests
-                    sh 'mvn test'
+                    sh 'mvn package'
                 }
             }
         }
