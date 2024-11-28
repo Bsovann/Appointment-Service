@@ -27,9 +27,7 @@ pipeline {
             steps {
                 script {
                     // Build Docker image
-                    sh '''
                     docker.build("$ECR_URI")
-                    '''
                 }
             }
         }
