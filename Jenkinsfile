@@ -1,5 +1,9 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            label('docker-agent-alpine')
+        }
+    }
     tools {
         maven 'Maven3'
     }
@@ -28,7 +32,7 @@ pipeline {
                 script {
                     // Build Docker image
                     sh '''
-                    docker build -t $ECR_URI .
+                    build($ECR_URI['-t'])
                     '''
                 }
             }
